@@ -1,0 +1,12 @@
+crewai>=0.80.0
+litellm>=1.44.22
+litellm[proxy]
+groq
+agentops==0.3.21
+tavily-python
+scrapegraph-py
+apscheduler
+pydantic[email]
+fastapi-sso
+sentence-transformers
+

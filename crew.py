@@ -16,7 +16,7 @@ from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSourc
 import os
 
 os.environ["AGENTOPS_API_KEY"] =AGENTOPS_API_KEY 
-os.environ["GROQ_API_KEY"]=AGENTOPS_API_KEY
+os.environ["GROQ_API_KEY"]=GROQ_API_KEY
 
 session = agentops.init(
     api_key=os.environ["AGENTOPS_API_KEY"],
@@ -244,45 +244,3 @@ procurement_report_author_task=Task(
     output_file=os.path.join(output_dir,"step_4_procurement_report.html"),
     agent=procurement_report_author_agent
 )
-
-"""##Run the AI Crew"""
-
-
-rankyx_crew=Crew(
-    agents=[
-        search_queries_recommendations_agent,
-        search_engin_agent,
-        scraping_agent,
-        procurement_report_author_agent,
-        ],
-    tasks=[
-        search_queries_recommendations_task,
-        search_engin_task,
-        scraping_task,
-        procurement_report_author_task,
-
-        ],
-    process=Process.sequential,
-    knowledge_sources=[company_context],
-    embedder={
-        "provider": "huggingface",
-        "config": {
-            "model": "sentence-transformers/all-MiniLM-L6-v2"
-        }
-    }
-)
-
-crew_results=rankyx_crew.kickoff(
-   inputs= {
-        "product_name": "coffee machine for the office",
-        "websites_list": ["www.amazon.eg", "www.jumia.com.eg", "www.noon.com/egypt-en"],
-        "country_name": "Egypt",
-        "no_keywords": 10,
-        "language":"English",
-        "score_th":0.10,
-        "top_recommendations_no":10,
-
-
-    }
-)
-

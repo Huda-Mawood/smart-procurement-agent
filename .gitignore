@@ -1,0 +1,12 @@
+# Environment
+.env
+# Output files
+ai-agent-output/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/

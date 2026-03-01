@@ -1,4 +1,4 @@
-name: CI — Lint & Validate
+name: CI — Validate
 
 on:
   push:

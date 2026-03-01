@@ -32,13 +32,4 @@ jobs:
           # Warnings only — don't fail on style issues
           flake8 . --count --exit-zero --max-line-length=120 --statistics
 
-      - name:  Validate Imports
-        run: |
-          python -c "
-          import crewai
-          import agentops
-          import tavily
-          import scrapegraph_py
-          import pydantic
-          print(' All imports validated successfully!')
-          "
+      

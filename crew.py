@@ -1,11 +1,9 @@
-
-
-
+from crewai import LLM
 from crewai import Agent, Task, Crew, Process,LLM
 from crewai.tools import tool
 import agentops
-from google.colab import userdata
 import os
+from dotenv import load_dotenv
 import json
 from pydantic import BaseModel,Field
 from typing import List
@@ -14,25 +12,28 @@ from scrapegraph_py import Client
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
 import os
+load_dotenv()
 
-os.environ["AGENTOPS_API_KEY"] =AGENTOPS_API_KEY 
-os.environ["GROQ_API_KEY"]=GROQ_API_KEY
+GROQ_API_KEY     = os.environ["GROQ_API_KEY"]
+AGENTOPS_API_KEY = os.environ["AGENTOPS_API_KEY"]
+TAVILY_API_KEY   = os.environ["TAVILY_API_KEY"]
+SCRAPE_API_KEY   = os.environ["SCRAPE_API_KEY"]
+
+
 
 session = agentops.init(
-    api_key=os.environ["AGENTOPS_API_KEY"],
+    api_key=AGENTOPS_API_KEY,
     skip_auto_end_session=True
 )
 
-import os
-from crewai import LLM
 
 output_dir = './ai-agent-output'
 os.makedirs(output_dir, exist_ok=True)
 
 basic_llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+    model="gemini/gemini-2.0-flash",
     temperature=0,
-    rpm=10
+    api_key=os.environ["GEMINI_API_KEY"]
 )
 search_client=TavilyClient(api_key=TAVILY_API_KEY)
 
@@ -108,7 +109,7 @@ class AllSearchResult(BaseModel):
 def search_engin_tool(query:str):
   """Useful for search-based queries. Use this to find current information about any query related pages using search engine. """
   return search_client.search(query)
-search_engin_agent=Agent(
+search_engine_agent=Agent(
     role="Search Engine Agent",
     goal="To search for products based on suggested search query",
     backstory="The agent is designed to help in looking for products by searching for products based on the suggested search queries.",
@@ -116,7 +117,7 @@ search_engin_agent=Agent(
     verbose=True,
     tools=[search_engin_tool]
 )
-search_engin_task=Task(
+search_engine_task=Task(
     description="\n".join([
          "The task is to search for products based on the suggested search queries.",
         "You have to collect results from multiple search queries.",
@@ -127,7 +128,7 @@ search_engin_task=Task(
     expected_output="A JSON object containing the search results",
     output_json=AllSearchResult,
     output_file=os.path.join(output_dir,"step_2_search_result_engin.json"),
-    agent=search_engin_agent
+    agent=search_engine_agent
 
 )
 

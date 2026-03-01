@@ -9,4 +9,6 @@ apscheduler
 pydantic
 fastapi-sso
 sentence-transformers
+google-generativeai
+crewai[google-genai]
 

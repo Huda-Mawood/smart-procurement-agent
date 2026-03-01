@@ -1,7 +1,7 @@
 from crewai import Crew, Process
 from crew import (
     search_queries_recommendations_agent,
-    search_engine_agent,
+    search_engine_agent, 
     scraping_agent,
     procurement_report_author_agent,
     search_queries_recommendations_task,
